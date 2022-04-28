@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,9 +11,9 @@ namespace OOPAssignment2
         {
             Game gameInstance = new Game();
 
-            gameInstance.
-            gameInstance.GetNumberOfPlayers();
+            gameInstance.StartGame();
 
+            Console.ReadKey();
         }
     }
 }
