@@ -6,20 +6,31 @@ using System.Threading.Tasks;
 
 namespace OOPAssignment2
 {
-    internal class MainMenu : Display, IMenu
+    internal class MainMenu : IMenu
     {
-        private readonly List<string> choices = new List<string>() { "Play Game!", "Settings", "Exit" };
+        public readonly List<string> text = new List<string>() { };
+        public readonly List<string> choices = new List<string>() { "Play Game!", "Settings", "Exit" };
+        private readonly Display displayInstance;
+        public List<string> Choices { get => choices; }
+
+
+        public MainMenu(Display display)
+        {
+            displayInstance = display;
+        }
 
         public void Run()
         {
             ShowMenu();
             while(HandleChoiceInputs(GetChoiceInputs()))
-            { }
+            {
+
+            }
             CloseMenu();
         }
         public void ShowMenu()
         {
-            throw new NotImplementedException();
+            
         }
 
         public void CloseMenu()

@@ -8,13 +8,12 @@ namespace OOPAssignment2
 {
     internal interface IMenu
     {
+        List<string> Choices { get; }
+
         void Run();
         void ShowMenu();
-
         int GetChoiceInputs();
-
         bool HandleChoiceInputs(int inputCode);
-
         void CloseMenu();
     }
 }

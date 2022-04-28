@@ -9,9 +9,12 @@ namespace OOPAssignment2
     {
         static void Main(string[] args)
         {
+            Display display = new Display();
             Game gameInstance = new Game();
+            MainMenu mainMenu = new MainMenu(display);
 
-            gameInstance.StartGame();
+            display.WriteTitle();
+            display.WriteChoices(mainMenu);
 
             Console.ReadKey();
         }
