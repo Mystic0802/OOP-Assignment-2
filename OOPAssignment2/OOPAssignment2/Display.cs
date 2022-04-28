@@ -18,11 +18,10 @@ namespace OOPAssignment2
 
         private bool titleShown;
 
-        public int CurrentVerticalPosition { get => currentVerticalPosition; private set => currentVerticalPosition = value; }
-        public int CurrentHorizontalPosition { get => currentHorizontalPosition; private set => currentHorizontalPosition = value; }
+        public int CurrentVerticalPosition { get => currentVerticalPosition; set => currentVerticalPosition = value; }
+        public int CurrentHorizontalPosition { get => currentHorizontalPosition; set => currentHorizontalPosition = value; }
 
         public bool TitleShown { get => titleShown; set => titleShown = value; }
-
 
         #endregion
 
@@ -35,29 +34,18 @@ namespace OOPAssignment2
         public void WriteTitle()
         {
             titleShown = true;
-            currentVerticalPosition = Console.CursorTop + titleVertical;
-            currentHorizontalPosition = Console.CursorLeft + titleHorizontal;
-            WriteAt("  _____ _                            __  __             ", currentHorizontalPosition, CurrentVerticalPosition);
-            Console.WriteLine(currentVerticalPosition);
-            WriteAt(" |_   _| |_  _ _ ___ ___   ___ _ _  |  \\/  |___ _ _ ___ ", currentHorizontalPosition, CurrentVerticalPosition++);
-            Console.WriteLine(currentVerticalPosition);
-            WriteAt("   | | | ' \\| '_/ -_) -_) / _ \\ '_| | |\\/| / _ \\ '_/ -_)", currentHorizontalPosition, CurrentVerticalPosition);
-            Console.WriteLine(currentVerticalPosition);
-            WriteAt("   |_| |_||_|_| \\___\\___| \\___/_|   |_|  |_\\___/_| \\___|", currentHorizontalPosition, CurrentVerticalPosition++);
-            Console.WriteLine(currentVerticalPosition);
-            WriteAt("─────────────────────────────────────────────────────────", currentHorizontalPosition, CurrentVerticalPosition);
-            Console.WriteLine(currentVerticalPosition);
+            WriteAt("  _____ _                            __  __             ", titleHorizontal, titleVertical);
+            WriteAt(" |_   _| |_  _ _ ___ ___   ___ _ _  |  \\/  |___ _ _ ___ ", titleHorizontal, titleVertical+1);
+            WriteAt("   | | | ' \\| '_/ -_) -_) / _ \\ '_| | |\\/| / _ \\ '_/ -_)", titleHorizontal, titleVertical+2);
+            WriteAt("   |_| |_||_|_| \\___\\___| \\___/_|   |_|  |_\\___/_| \\___|", titleHorizontal, titleVertical+3);
+            WriteAt("─────────────────────────────────────────────────────────", titleHorizontal, titleVertical+4);
         }
 
         public void WriteChoices(IMenu menu)
         {
-            currentVerticalPosition = titleShown ? currentVerticalPosition+2 : Console.CursorTop;
-
             for(int i = 0; i < menu.Choices.Count; i++)
             { 
-                WriteAt($"{i + 1} : {menu.Choices[i]}", CurrentHorizontalPosition, CurrentVerticalPosition);
-                currentHorizontalPosition = Console.CursorLeft;
-                currentVerticalPosition++;
+                WriteAt($"{i + 1} : {menu.Choices[i]}", 0, titleShown ? (titleVertical + 4) + 2 : 0);
             }
         }
 
@@ -65,7 +53,7 @@ namespace OOPAssignment2
         {
             try
             {
-                Console.SetCursorPosition(CurrentHorizontalPosition + x, CurrentVerticalPosition + y);
+                Console.SetCursorPosition(x, y);
                 Console.Write(s);
             }
             catch (ArgumentOutOfRangeException e)
