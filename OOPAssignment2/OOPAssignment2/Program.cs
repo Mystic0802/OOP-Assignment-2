@@ -15,14 +15,13 @@ namespace OOPAssignment2
             display.WriteTitle();
             MainMenu mainMenu = new MainMenu();
             var next = mainMenu.Run();
-            if (next != null)
-                next.Run();
-            else
+            while (next != null)
             {
-                Game game = new Game();
-                game.StartGame();
+                 next = next.Run();
             }
 
+            Game game = new Game();
+            game.StartGame();
 
             Console.ReadKey();
         }
