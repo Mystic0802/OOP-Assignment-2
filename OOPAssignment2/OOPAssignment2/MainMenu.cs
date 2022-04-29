@@ -8,40 +8,29 @@ namespace OOPAssignment2
 {
     internal class MainMenu : IMenu
     {
-        public readonly List<string> text = new List<string>() { };
         public readonly List<string> choices = new List<string>() { "Play Game!", "Settings", "Exit" };
-        private readonly Display displayInstance;
+        
         public List<string> Choices { get => choices; }
 
+        private IMenu nextMenu;
 
-        public MainMenu(Display display)
+        public IMenu Run()
         {
-            displayInstance = display;
-        }
-
-        public void Run()
-        {
-            ShowMenu();
-            while(HandleChoiceInputs(GetChoiceInputs()))
-            {
-
-            }
+            Program.display.WriteMenuChoices(this);
+            while (!HandleChoiceInputs(GetChoiceInputs()));
             CloseMenu();
-        }
-        public void ShowMenu()
-        {
-            
+            return nextMenu;
         }
 
         public void CloseMenu()
         {
-            throw new NotImplementedException();
+            Program.display.ClearDisplay();
         }
 
         public int GetChoiceInputs()
         {
             string input = Console.ReadLine();
-            if (int.TryParse(input, out int choice) && choice > 0 && choice <= choices.Count)
+            if (int.TryParse(input, out int choice) && (choice > 0 && choice <= choices.Count))
                 return choice;
             else return -1;
         }
@@ -50,19 +39,19 @@ namespace OOPAssignment2
         {
             switch (inputCode)
             {
-                case -1:
-
-                    return false;
                 case 1:
-
+                    CloseMenu();
+                    nextMenu = null;
                     return true;
                 case 2:
-
+                    CloseMenu();
+                    //nextMenu = new SettingsMenu();
                     return true;
                 case 3:
-
+                    Environment.Exit(0);
                     return true;
                 default:
+                    Program.display.WriteMenuChoicesError();
                     return false;
             }
         }

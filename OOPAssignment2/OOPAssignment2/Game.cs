@@ -15,6 +15,22 @@ namespace OOPAssignment2
 
         #endregion
 
+        public Game()
+        {
+            Program.display.WriteTitle();
+            SetupPlayers();
+        }
+
+        public void SetupPlayers()
+        {
+            Program.display.SetupInput("Enter number of players(1-4):", Program.display.CurrentVerticalPosition + 1);
+            int playerCount = 0;
+            while ((!int.TryParse(Console.ReadLine(), out playerCount)) || (playerCount < 1 || playerCount > 4))
+            {
+                Program.display.WriteInputError("Enter number of players(1-4):", Program.display.CurrentVerticalPosition-1);
+            }
+        }
+
         public void StartGame()
         {
 

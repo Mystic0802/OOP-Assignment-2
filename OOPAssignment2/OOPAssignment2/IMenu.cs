@@ -10,8 +10,7 @@ namespace OOPAssignment2
     {
         List<string> Choices { get; }
 
-        void Run();
-        void ShowMenu();
+        IMenu Run();
         int GetChoiceInputs();
         bool HandleChoiceInputs(int inputCode);
         void CloseMenu();

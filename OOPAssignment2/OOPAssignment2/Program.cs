@@ -7,14 +7,22 @@ namespace OOPAssignment2
 {
     internal class Program
     {
+        public static Display display;
+
         static void Main(string[] args)
         {
-            Display display = new Display();
-            Game gameInstance = new Game();
-            MainMenu mainMenu = new MainMenu(display);
-
+            display = new Display();
             display.WriteTitle();
-            display.WriteChoices(mainMenu);
+            MainMenu mainMenu = new MainMenu();
+            var next = mainMenu.Run();
+            if (next != null)
+                next.Run();
+            else
+            {
+                Game game = new Game();
+                game.StartGame();
+            }
+
 
             Console.ReadKey();
         }
