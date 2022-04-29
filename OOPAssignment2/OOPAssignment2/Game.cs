@@ -18,6 +18,7 @@ namespace OOPAssignment2
         public Game()
         {
             Program.display.WriteTitle();
+            dice.AddRange(new List<Die> { new Die(), new Die(), new Die(), new Die(), new Die() });
             SetupPlayers();
         }
 
@@ -47,8 +48,7 @@ namespace OOPAssignment2
                 for(int i = 0; i < playerCount; i++)
                 {
                     Program.display.SetupInput($"Enter name of player {i+1}:", Program.display.CurrentVerticalPosition);
-                    string playerName = "";
-                    playerName = Console.ReadLine().Trim();
+                    string playerName = Console.ReadLine().Trim();
                     while (playerName.Length == 0 || playerName.Length > 25)
                     {
                         Program.display.WriteInputError($"Enter name of player {i + 1}:", Program.display.CurrentVerticalPosition - 1);
@@ -61,7 +61,56 @@ namespace OOPAssignment2
 
         public void StartGame()
         {
+            Program.display.ClearDisplay();
+            Program.display.ShowDice();
+            StartRoll();
+        }
 
+        public void StartRoll() // Rolls the dice for players
+        {
+            int[] rollTotals = new int[PlayerList.Count];
+            for(int i = 0; i < PlayerList.Count; i++)
+            {
+                if (!PlayerList[i].IsComputer)
+                {
+                    Program.display.WriteAt("Press Enter to roll!", Program.display.CurrentHorizontalPosition, Program.display.CurrentVerticalPosition);
+                }
+                rollTotals[i] = RollTotal();
+                Program.display.WriteAt("Press Enter to roll!", Program.display.CurrentHorizontalPosition, Program.display.CurrentVerticalPosition);
+            }
+
+            int counter = PlayerList.Count;
+            bool sorted = false;
+            while(counter > 1 && !sorted)
+            {
+                sorted = true;
+                for(int i = 1; i < counter; i++)
+                {
+                    if(rollTotals[i-1] > rollTotals[i])
+                    {
+                        (rollTotals[i-1], rollTotals[i]) = (rollTotals[i], rollTotals[i-1]);
+                        (PlayerList[i-1], PlayerList[i]) = (PlayerList[i], PlayerList[i-1]);
+                        sorted = false;
+                    }
+                }
+                counter--;
+            }
+
+        }
+
+
+        public int RollTotal()
+        {
+            int[] rolls = new int[5];
+            int total = 0;
+            for(int i= 0; i < 5; i ++)
+            {
+                var roll = Dice[i].Roll();
+                rolls[i] = roll;
+                total += roll;
+            }
+            Program.display.ShowDice(rolls);
+            return total;
         }
     }
 }

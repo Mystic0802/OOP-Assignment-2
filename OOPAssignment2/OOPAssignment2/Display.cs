@@ -92,5 +92,10 @@ namespace OOPAssignment2
             CurrentVerticalPosition = Console.CursorTop = 0;
             CurrentHorizontalPosition = Console.CursorLeft = 0;
         }
+
+        internal void ShowDice(int[] rolls)
+        {
+            
+        }
     }
 }
