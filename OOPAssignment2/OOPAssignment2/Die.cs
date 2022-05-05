@@ -2,37 +2,20 @@
 
 namespace OOPAssignment2
 {
-    internal class Die
+        public class Die
     {
-        #region Fields & Properties
+        public Random Rand { get; set; }
+        public bool IsFrozen { get; set; }
 
-        private int sides;
-        private bool isFair;
-        private Random rand;
-
-        public int Sides { get => sides; private set => sides = value; }
-        public bool IsFair { get => isFair; private set => isFair = value; }
-        public Random Rand { get => rand; private set => rand = value; }
-
-        #endregion
-
-        public Die(int sides = 6, bool fairDie = true)
+        public Die(Random r)
         {
-            Sides = sides;
-            IsFair = fairDie;
-            Rand = new Random();
+            Rand = r;
+            IsFrozen = false;
         }
 
         public int Roll()
         {
-            if (IsFair)
-                return Rand.Next(1, sides);
-            else
-            {
-                int result = Rand.Next(1, sides + (sides / 2) - 1);
-                return result > sides ? sides : result;
-            }
+            return Rand.Next(1,7);
         }
-
     }
 }

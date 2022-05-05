@@ -3,114 +3,192 @@ using System.Collections.Generic;
 
 namespace OOPAssignment2
 {
-    internal class Game
+    public class Game
     {
-        #region Fields & Properties
-
-        private List<Player> playerList = new List<Player>();
-        private List<Die> dice = new List<Die>();
-
-        protected List<Player> PlayerList { get => playerList; set => playerList = value; }
-        protected List<Die> Dice { get => dice; set => dice = value; }
-
-        #endregion
+        public List<Die> FrozenDiceList { get; set; }
+        public List<Die> DiceList { get; set; }
+        public List<Player> PlayerList { get; set; }
 
         public Game()
         {
-            Program.display.WriteTitle();
-            dice.AddRange(new List<Die> { new Die(), new Die(), new Die(), new Die(), new Die() });
+            FrozenDiceList = new List<Die>();
+            DiceList = new List<Die>();
+            PlayerList = new List<Player>();
+        }
+
+        public void SetupGame()
+        {
+            SetupDice();
             SetupPlayers();
         }
 
-        public void SetupPlayers()
+        public void SetupDice()
         {
-            Program.display.SetupInput("Enter number of human players(1-4):", Program.display.CurrentVerticalPosition + 1);
-            int playerCount = 0;
-            while ((!int.TryParse(Console.ReadLine(), out playerCount)) || (playerCount < 1 || playerCount > 4))
+            Random rand = new Random();
+            for (int i = 0; i < 5; i++)
             {
-                Program.display.WriteInputError("Enter number of human players(1-4):", Program.display.CurrentVerticalPosition-1);
+                DiceList.Add(new Die(rand));
             }
-            if(playerCount == 1)
+        }
+
+        private void SetupPlayers()
+        {
+            int humanCount;
+            Console.Write("How many human players (1-4): ");
+            while (!int.TryParse(Console.ReadLine(), out humanCount) && (humanCount < 1 || humanCount > 4))
             {
-                Program.display.SetupInput("Enter number of computer players(1-3):", Program.display.CurrentVerticalPosition);
-                int computerCount = 0;
-                while ((!int.TryParse(Console.ReadLine(), out computerCount)) || (computerCount < 1 || computerCount > 3))
+                Console.Write("How many human players (1-4): ");
+            }
+
+            for (int i = 0; i < humanCount; i++)
+            {
+                PlayerList.Add(new Player($"Player{i + 1}"));
+            }
+
+            if (humanCount == 1)
+            {
+                int computerCount;
+                Console.Write($"How many computer players (1-3): ");
+                while (!int.TryParse(Console.ReadLine(), out computerCount) && (computerCount < 1 || computerCount > 3))
                 {
-                    Program.display.WriteInputError("Enter number of computer players(1-3):", Program.display.CurrentVerticalPosition - 1);
+                    Console.Write("How many computer players (1-3): ");
                 }
-                for(int i = 0; i < 3; i++)
+                for (int i = 0; i < computerCount; i++)
                 {
                     PlayerList.Add(new Player($"Computer{i + 1}", true));
-                }
-            }
-            else
-            {
-                for(int i = 0; i < playerCount; i++)
-                {
-                    Program.display.SetupInput($"Enter name of player {i+1}:", Program.display.CurrentVerticalPosition);
-                    string playerName = Console.ReadLine().Trim();
-                    while (playerName.Length == 0 || playerName.Length > 25)
-                    {
-                        Program.display.WriteInputError($"Enter name of player {i + 1}:", Program.display.CurrentVerticalPosition - 1);
-                        playerName = Console.ReadLine().Trim();
-                    }
-                    PlayerList.Add(new Player(playerName));
                 }
             }
         }
 
         public void StartGame()
         {
-            Program.display.ClearDisplay();
-            Program.display.ShowDice();
-            StartRoll();
-        }
-
-        public void StartRoll() // Rolls the dice for players
-        {
-            int[] rollTotals = new int[PlayerList.Count];
-            for(int i = 0; i < PlayerList.Count; i++)
+            int round = 0;
+            while (true)
             {
-                if (!PlayerList[i].IsComputer)
-                {
-                    Program.display.WriteAt("Press Enter to roll!", Program.display.CurrentHorizontalPosition, Program.display.CurrentVerticalPosition);
-                }
-                rollTotals[i] = RollTotal();
-                Program.display.WriteAt("Press Enter to roll!", Program.display.CurrentHorizontalPosition, Program.display.CurrentVerticalPosition);
-            }
+                round++;
+                Console.WriteLine($"\nRound {round}!");
 
-            int counter = PlayerList.Count;
-            bool sorted = false;
-            while(counter > 1 && !sorted)
-            {
-                sorted = true;
-                for(int i = 1; i < counter; i++)
+                for (int i = 0; i < PlayerList.Count; i++)
                 {
-                    if(rollTotals[i-1] > rollTotals[i])
+                    foreach (var die in DiceList)
                     {
-                        (rollTotals[i-1], rollTotals[i]) = (rollTotals[i], rollTotals[i-1]);
-                        (PlayerList[i-1], PlayerList[i]) = (PlayerList[i], PlayerList[i-1]);
-                        sorted = false;
+                        die.IsFrozen = false;
+                    }
+
+                    Console.WriteLine($"\n{PlayerList[i].Name}'s turn!");
+                    if (PlayerList[i].IsComputer)
+                        ComputerRoll(PlayerList[i]);
+                    else
+                        PlayerRoll(PlayerList[i]);
+
+                    if (PlayerList[i].Score >= 50)
+                    {
+                        Console.WriteLine(PlayerList[i].Name + " won the game!");
+                        return;
                     }
                 }
-                counter--;
+            }
+        }
+
+        private void PlayerRoll(Player player)
+        {
+            Console.WriteLine("Press Enter to roll the dice.");
+            Console.ReadKey();
+            var score = RollDice();
+            player.Score += score;
+            Console.WriteLine(player.Name + " scored " + score + ". New score: " + player.Score);
+            Console.ReadKey();
+        }
+
+        private void ComputerRoll(Player player)
+        {
+            var score = RollDice();
+            player.Score += score;
+            Console.WriteLine(player.Name + " scored " + score + ". New score: " + player.Score);
+
+
+
+
+            Console.ReadKey();
+        }
+
+        public int RollDice()
+        {
+            int[] rolls = new int[DiceList.Count];
+            for (int i = 0; i < DiceList.Count; i++)
+            {
+                rolls[i] = DiceList[i].Roll();
             }
 
+            //move to output
+            for (int i = 0; i < DiceList.Count; i++)
+            {
+                Console.Write(rolls[i] + ", ");
+            }
+            Console.WriteLine();
+
+            var score = GetRollScore(rolls);
+            if (score == -1)
+            {
+                Console.WriteLine("Rerolling...");
+                score = RollDice(rolls);
+                return score == -1 ? 0 : score; // Check if score is -1 return as 0
+            }
+
+            return score;
+        }
+
+        public int RollDice(int[] previousRolls)
+        {
+            for (int i = 0; i < DiceList.Count; i++)
+            {
+                if (!DiceList[i].IsFrozen)
+                    previousRolls[i] = DiceList[i].Roll();
+            }
+
+            //move to output
+            for (int i = 0; i < DiceList.Count; i++)
+            {
+                Console.Write(previousRolls[i] + ", ");
+            }
+            Console.WriteLine();
+
+
+            var score = GetRollScore(previousRolls);
+            return score == -1 ? 0 : score; // Check if score is -1 return as 0
         }
 
 
-        public int RollTotal()
+        public int GetRollScore(int[] rolls)
         {
-            int[] rolls = new int[5];
-            int total = 0;
-            for(int i= 0; i < 5; i ++)
+            List<Die> mostDuplicates = new List<Die>();
+            for (int i = 0; i < rolls.Length - 1; i++)
             {
-                var roll = Dice[i].Roll();
-                rolls[i] = roll;
-                total += roll;
+                foreach (var dice in DiceList)
+                {
+                    dice.IsFrozen = true;
+                }
+                for (int c = 0; c < rolls.Length; c++)
+                {
+                    if (rolls[i] != rolls[c])
+                    {
+                        DiceList[c].IsFrozen = false;
+                    }
+                }
+                var temp = DiceList.FindAll(s => s.IsFrozen); // Returns a new list without null values
+                if (temp.Count > mostDuplicates.Count)
+                    mostDuplicates = temp;
             }
-            Program.display.ShowDice(rolls);
-            return total;
+            foreach (var dice in DiceList)
+            {
+                dice.IsFrozen = mostDuplicates.Contains(dice);
+            }
+            if (mostDuplicates.Count == 2)
+                return -1;
+            else if (mostDuplicates.Count > 2)
+                return (int)(3 * Math.Pow(2, mostDuplicates.Count - 3));
+            else
+                return 0;
         }
     }
 }

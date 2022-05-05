@@ -86,6 +86,11 @@ namespace OOPAssignment2
                 currentHorizontalPosition = Console.CursorLeft;
         }
 
+        public void ClearLine(int y)
+        {
+            WriteAt($"{new string(' ', Console.WindowWidth)}", 0, y);
+        }
+
         public void ClearDisplay()
         {
             Console.Clear();
@@ -93,9 +98,30 @@ namespace OOPAssignment2
             CurrentHorizontalPosition = Console.CursorLeft = 0;
         }
 
-        internal void ShowDice(int[] rolls)
+        public void ShowDice(int roll, int position) // ─│┌┐└┘
         {
-            
+            // Draws the Dice face. Each dot has a boolean expression attached to it.
+            //  ┌───────┐
+            //  │ O   O │
+            //  │ O O O │
+            //  │ O   O │
+            //  └───────┘
+            WriteAt("┌───────┐", 10 * position, 0);
+            WriteAt($"│ {(roll > 1 ? 'O' : ' ')}   {(roll > 3 ? 'O' : ' ')} │", 10 * position, 1);
+            WriteAt($"│ {(roll == 6 ? 'O' : ' ')} {(roll % 2 != 0 ? 'O' : ' ')} {(roll == 6 ? 'O' : ' ')} │", 10 * position, 2);
+            WriteAt($"│ {(roll > 3 ? 'O' : ' ')}   {(roll > 1 ? 'O' : ' ')} │", 10 * position, 3);
+            WriteAt("└───────┘", 10 * position, 4);
+        }
+        internal void ShowEmptyDice(int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                WriteAt("┌───────┐", 10 * i, 0);
+                WriteAt("│       │", 10 * i, 1);
+                WriteAt("│       │", 10 * i, 2);
+                WriteAt("│       │", 10 * i, 3);
+                WriteAt("└───────┘", 10 * i, 4);
+            }
         }
     }
 }
