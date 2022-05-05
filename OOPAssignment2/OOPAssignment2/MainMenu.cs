@@ -8,52 +8,29 @@ namespace OOPAssignment2
 {
     internal class MainMenu : IMenu
     {
-        public readonly List<string> choices = new List<string>() { "Play Game!", "Settings", "Exit" };
+        public readonly List<string> options = new List<string>() { "Play Game!", "Settings", "Exit" };
         
-        public List<string> Choices { get => choices; }
+        public List<string> Options { get => options; }
 
         private IMenu nextMenu;
 
-        public IMenu Run()
+        public void Run()
         {
-            Program.display.WriteMenuChoices(this);
-            while (!HandleChoiceInputs(GetChoiceInputs()));
-            CloseMenu();
-            return nextMenu;
+            //Show options
+            //Get input
+            //exit
         }
 
         public void CloseMenu()
         {
-            Program.display.ClearDisplay();
+            // Check nextMenu is not null. Throw exception if so.
+            // Clear menu display
         }
 
-        public int GetChoiceInputs()
+        public void HandleInputs()
         {
-            string input = Console.ReadLine();
-            if (int.TryParse(input, out int choice) && (choice > 0 && choice <= choices.Count))
-                return choice;
-            else return -1;
-        }
-
-        public bool HandleChoiceInputs(int inputCode)
-        {
-            switch (inputCode)
-            {
-                case 1:
-                    CloseMenu();
-                    nextMenu = null;
-                    return true;
-                case 2:
-                    CloseMenu();
-                    //nextMenu = new SettingsMenu();
-                    return true;
-                case 3:
-                    Environment.Exit(0);
-                    return true;
-                default:
-                    Program.display.WriteMenuChoicesError();
-                    return false;
-            }
+            // Get input from user.
+            // Based on input set nextMenu. 
         }
 
     }

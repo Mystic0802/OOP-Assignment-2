@@ -6,12 +6,8 @@ using System.Threading.Tasks;
 
 namespace OOPAssignment2
 {
-    public interface IMenu
+    class MenuIO
     {
-        List<string> Options { get; }
 
-        void Run();
-        void HandleInputs();
-        void CloseMenu();
     }
 }

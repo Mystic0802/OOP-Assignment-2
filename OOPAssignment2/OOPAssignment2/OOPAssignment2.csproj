@@ -8,7 +8,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>OOPAssignment2</RootNamespace>
     <AssemblyName>OOPAssignment2</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
@@ -49,6 +49,8 @@
     <Compile Include="Game.cs" />
     <Compile Include="IMenu.cs" />
     <Compile Include="MainMenu.cs" />
+    <Compile Include="IO.cs" />
+    <Compile Include="MenuIO.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

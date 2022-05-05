@@ -53,9 +53,9 @@ namespace OOPAssignment2
         {
             int choicesTop = currentVerticalPosition;
 
-            for(int i = 0; i < menu.Choices.Count; i++)
+            for(int i = 0; i < menu.Options.Count; i++)
             { 
-                WriteAt($"{i + 1} : {menu.Choices[i]}", 0, choicesTop+i);
+                WriteAt($"{i + 1} : {menu.Options[i]}", 0, choicesTop+i);
             }
 
             int choicesBottom = currentVerticalPosition;
