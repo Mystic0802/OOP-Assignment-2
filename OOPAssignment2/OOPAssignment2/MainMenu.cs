@@ -6,32 +6,49 @@ using System.Threading.Tasks;
 
 namespace OOPAssignment2
 {
-    internal class MainMenu : IMenu
+    internal class MainMenu : MenuIO, IMenu
     {
         public readonly List<string> options = new List<string>() { "Play Game!", "Settings", "Exit" };
         
         public List<string> Options { get => options; }
 
-        private IMenu nextMenu;
+        public IMenu NextMenu { get; set; }
 
         public void Run()
         {
-            //Show options
-            //Get input
-            //exit
+            WriteOptions(Options);
+            
+            HandleInputs();
+            CloseMenu();
         }
 
         public void CloseMenu()
         {
-            // Check nextMenu is not null. Throw exception if so.
-            // Clear menu display
+            if (NextMenu == null)
+            {
+                // throw custom exception
+            }
+            ClearMenu();
         }
 
         public void HandleInputs()
         {
-            // Get input from user.
-            // Based on input set nextMenu. 
+            var userInput = GetInput();
+            if (userInput != null && int.TryParse(userInput, out int result) && result > 0 && result <= Options.Count)
+            {
+                switch (result)
+                {
+                    case 1:
+                        NextMenu = new Game();
+                        break;
+                    case 2:
+                        NextMenu = new SettingsMenu();
+                        break;
+                    default:
+                        NextMenu = new MainMenu();
+                        break;
+                }
+            }
         }
-
     }
 }

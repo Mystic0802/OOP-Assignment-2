@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace OOPAssignment2
 {
-    public static class IO
+    public class IO
     {
         public static void Write(string text, int x, int y)
         {
             MoveCursor(x, y);
             Console.Write(text);
         }
-        
+
         public static void MoveCursor(int x, int y)
         {
             try
@@ -26,6 +26,11 @@ namespace OOPAssignment2
             }
         }
 
+        public static void MoveToNextLine()
+        {
+            MoveCursor(0, Console.CursorTop+1);
+        }
+
         public static void ClearLine(int y)
         {
             Write(new string(' ', Console.WindowWidth), 0, y);
@@ -34,6 +39,12 @@ namespace OOPAssignment2
         public static void ClearAll()
         {
             Console.Clear();
+            MoveCursor(0, 0);
+        }
+
+        public static string GetInput()
+        {
+            return Console.ReadLine();
         }
     }
 }

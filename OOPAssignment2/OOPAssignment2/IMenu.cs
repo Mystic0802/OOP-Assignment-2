@@ -9,6 +9,7 @@ namespace OOPAssignment2
     public interface IMenu
     {
         List<string> Options { get; }
+        IMenu NextMenu { get; set; }
 
         void Run();
         void HandleInputs();

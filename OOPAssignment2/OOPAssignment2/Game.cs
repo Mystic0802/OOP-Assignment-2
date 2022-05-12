@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace OOPAssignment2
 {
-    public class Game
+    public class Game : GameIO, IMenu
     {
         public List<Die> FrozenDiceList { get; set; }
         public List<Die> DiceList { get; set; }
         public List<Player> PlayerList { get; set; }
+
+        public List<string> Options => throw new NotImplementedException();
+
+        public IMenu NextMenu { get; set; }
 
         public Game()
         {
@@ -15,6 +20,8 @@ namespace OOPAssignment2
             DiceList = new List<Die>();
             PlayerList = new List<Player>();
         }
+
+        #region setup
 
         public void SetupGame()
         {
@@ -33,35 +40,19 @@ namespace OOPAssignment2
 
         private void SetupPlayers()
         {
-            int humanCount;
-            Console.Write("How many human players (1-4): ");
-            while (!int.TryParse(Console.ReadLine(), out humanCount) && (humanCount < 1 || humanCount > 4))
-            {
-                Console.Write("How many human players (1-4): ");
-            }
+            PlayerList.AddRange(GetPlayersCount("Human", 1, 4));
 
-            for (int i = 0; i < humanCount; i++)
+            if (PlayerList.Count == 1)
             {
-                PlayerList.Add(new Player($"Player{i + 1}"));
-            }
-
-            if (humanCount == 1)
-            {
-                int computerCount;
-                Console.Write($"How many computer players (1-3): ");
-                while (!int.TryParse(Console.ReadLine(), out computerCount) && (computerCount < 1 || computerCount > 3))
-                {
-                    Console.Write("How many computer players (1-3): ");
-                }
-                for (int i = 0; i < computerCount; i++)
-                {
-                    PlayerList.Add(new Player($"Computer{i + 1}", true));
-                }
+                PlayerList.AddRange(GetPlayersCount("Computer", 1, 3));
             }
         }
 
-        public void StartGame()
+        #endregion
+
+        public void Run()
         {
+            SetupGame();
             int round = 0;
             while (true)
             {
@@ -90,9 +81,12 @@ namespace OOPAssignment2
             }
         }
 
+        #region DiceRolling
+
         private void PlayerRoll(Player player)
         {
             Console.WriteLine("Press Enter to roll the dice.");
+
             Console.ReadKey();
             var score = RollDice();
             player.Score += score;
@@ -102,14 +96,10 @@ namespace OOPAssignment2
 
         private void ComputerRoll(Player player)
         {
+            Thread.Sleep(1000); // It's ok to make thread sleep in this case. There is nothing (e.g. gui, async methods) that rely on this thread.
             var score = RollDice();
             player.Score += score;
             Console.WriteLine(player.Name + " scored " + score + ". New score: " + player.Score);
-
-
-
-
-            Console.ReadKey();
         }
 
         public int RollDice()
@@ -120,13 +110,8 @@ namespace OOPAssignment2
                 rolls[i] = DiceList[i].Roll();
             }
 
-            //move to output
-            for (int i = 0; i < DiceList.Count; i++)
-            {
-                Console.Write(rolls[i] + ", ");
-            }
-            Console.WriteLine();
-
+            WriteDice(rolls);
+            
             var score = GetRollScore(rolls);
             if (score == -1)
             {
@@ -146,12 +131,7 @@ namespace OOPAssignment2
                     previousRolls[i] = DiceList[i].Roll();
             }
 
-            //move to output
-            for (int i = 0; i < DiceList.Count; i++)
-            {
-                Console.Write(previousRolls[i] + ", ");
-            }
-            Console.WriteLine();
+            WriteDice(previousRolls);
 
 
             var score = GetRollScore(previousRolls);
@@ -189,6 +169,18 @@ namespace OOPAssignment2
                 return (int)(3 * Math.Pow(2, mostDuplicates.Count - 3));
             else
                 return 0;
+        }
+
+        #endregion
+
+        public void HandleInputs()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CloseMenu()
+        {
+            //NextMenu = GameOverMenu();
         }
     }
 }
