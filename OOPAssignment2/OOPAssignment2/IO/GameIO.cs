@@ -40,5 +40,10 @@ namespace OOPAssignment2
                 yield return new Player($"{playerType}{i + 1}");
             }
         }
+        
+        public void WriteLeaderboard()
+        {
+
+        }
     }
 }

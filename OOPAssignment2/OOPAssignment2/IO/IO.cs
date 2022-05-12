@@ -46,5 +46,28 @@ namespace OOPAssignment2
         {
             return Console.ReadLine();
         }
+
+        public void WriteInMiddle(string s, int y)
+        {
+            Write(s, (Console.WindowWidth / 2) - (s.Length / 2), y);
+        }
+
+        public static void WriteBoilerplate()
+        {
+            WriteTitle();
+        }
+
+        private static void WriteTitle()
+        {
+            int horizontal = (Console.WindowWidth / 2)-57;
+            int vertical = 0;
+
+            Write("  _____ _                            __  __", horizontal, vertical);
+            Write(" |_   _| |_  _ _ ___ ___   ___ _ _  |  \\/  |___ _ _ ___", horizontal, vertical+1);
+            Write("   | | | ' \\| '_/ -_) -_) / _ \\ '_| | |\\/| / _ \\ '_/ -_)", horizontal, vertical + 1);
+            Write("   |_| |_||_|_| \\___\\___| \\___/_|   |_|  |_\\___/_| \\___|", horizontal, vertical + 1);
+            Write("─────────────────────────────────────────────────────────", horizontal, vertical + 1);
+
+        }
     }
 }

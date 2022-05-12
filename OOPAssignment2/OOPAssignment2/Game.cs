@@ -6,6 +6,8 @@ namespace OOPAssignment2
 {
     public class Game : GameIO, IMenu
     {
+        private Player winner;
+
         public List<Die> FrozenDiceList { get; set; }
         public List<Die> DiceList { get; set; }
         public List<Player> PlayerList { get; set; }
@@ -57,7 +59,7 @@ namespace OOPAssignment2
             while (true)
             {
                 round++;
-                Console.WriteLine($"\nRound {round}!");
+                WriteInMiddle($"Round {round}!", (Console.WindowHeight / 2) - 2);
 
                 for (int i = 0; i < PlayerList.Count; i++)
                 {
@@ -65,8 +67,9 @@ namespace OOPAssignment2
                     {
                         die.IsFrozen = false;
                     }
+                    ClearLine((Console.WindowHeight / 2) - 1);
+                    WriteInMiddle($"{PlayerList[i].Name}'s turn!", (Console.WindowHeight / 2) - 1);
 
-                    Console.WriteLine($"\n{PlayerList[i].Name}'s turn!");
                     if (PlayerList[i].IsComputer)
                         ComputerRoll(PlayerList[i]);
                     else
@@ -74,35 +77,47 @@ namespace OOPAssignment2
 
                     if (PlayerList[i].Score >= 50)
                     {
-                        Console.WriteLine(PlayerList[i].Name + " won the game!");
+                        winner = PlayerList[i];
                         return;
                     }
+                    Thread.Sleep(1000); // It's ok to make thread sleep in this case. There is nothing (e.g. gui, async methods) that rely on this thread.
                 }
             }
         }
 
+
+        public void HandleInputs()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CloseMenu()
+        {
+            ClearLine(Console.WindowHeight - 2);
+            ClearLine(Console.WindowHeight - 1);
+            ClearLine(Console.WindowHeight);
+            ClearLine(Console.WindowHeight + 1);
+            NextMenu = new GameOverMenu(winner);
+        }
+
         #region DiceRolling
 
+        //could implement delegate here
         private void PlayerRoll(Player player)
         {
-            Console.WriteLine("Press Enter to roll the dice.");
+            WriteInMiddle("Press Enter to roll the dice.", Console.WindowHeight / 2);
+            Console.ReadKey();
+            ClearLine(Console.WindowHeight / 2);
 
-            Console.ReadKey();
-            var score = RollDice();
-            player.Score += score;
-            Console.WriteLine(player.Name + " scored " + score + ". New score: " + player.Score);
-            Console.ReadKey();
+            RollDice(player);
         }
 
         private void ComputerRoll(Player player)
         {
-            Thread.Sleep(1000); // It's ok to make thread sleep in this case. There is nothing (e.g. gui, async methods) that rely on this thread.
-            var score = RollDice();
-            player.Score += score;
-            Console.WriteLine(player.Name + " scored " + score + ". New score: " + player.Score);
+            RollDice(player);
         }
 
-        public int RollDice()
+        public void RollDice(Player player)
         {
             int[] rolls = new int[DiceList.Count];
             for (int i = 0; i < DiceList.Count; i++)
@@ -115,12 +130,18 @@ namespace OOPAssignment2
             var score = GetRollScore(rolls);
             if (score == -1)
             {
-                Console.WriteLine("Rerolling...");
+                if (!player.IsComputer)
+                { 
+                    WriteInMiddle($"2 of a kind has been rolled! Press Enter to reroll!", Console.WindowHeight / 2);
+                    Console.ReadKey();
+                    ClearLine(Console.WindowHeight / 2);
+                }
+
                 score = RollDice(rolls);
-                return score == -1 ? 0 : score; // Check if score is -1 return as 0
             }
 
-            return score;
+            WriteInMiddle($"{player.Name} scored {score}", (Console.WindowHeight / 2) + 1);
+            player.Score += score;
         }
 
         public int RollDice(int[] previousRolls)
@@ -130,9 +151,7 @@ namespace OOPAssignment2
                 if (!DiceList[i].IsFrozen)
                     previousRolls[i] = DiceList[i].Roll();
             }
-
             WriteDice(previousRolls);
-
 
             var score = GetRollScore(previousRolls);
             return score == -1 ? 0 : score; // Check if score is -1 return as 0
@@ -172,15 +191,5 @@ namespace OOPAssignment2
         }
 
         #endregion
-
-        public void HandleInputs()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void CloseMenu()
-        {
-            //NextMenu = GameOverMenu();
-        }
     }
 }

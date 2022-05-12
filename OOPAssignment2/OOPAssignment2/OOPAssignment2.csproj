@@ -45,8 +45,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Die.cs" />
+    <Compile Include="Menu\GameOverMenu.cs" />
     <Compile Include="IO\GameIO.cs" />
-    <Compile Include="Display.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Menu\IMenu.cs" />
     <Compile Include="Menu\MainMenu.cs" />
