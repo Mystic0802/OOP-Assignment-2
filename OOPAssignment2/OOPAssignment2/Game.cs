@@ -24,17 +24,27 @@ namespace OOPAssignment2
             SortedPlayersByScore = new List<Player>();
         }
 
+        public Game(List<Player> players)
+        {
+            DiceList = new List<Die>();
+            PlayerList = players;
+            SortedPlayersByScore = new List<Player>();
+        }
+
         #region [ setup ]
 
         public void SetupGame()
         {
             SetupDice();
-            SetupPlayers();
+            if (PlayerList.Count == 0)
+                SetupPlayers();
+            else
+                PlayerList.ForEach(player => player.Score = 0); // Reset score to 0;
             WriteScoreboard();
             UpdateScoreboard(SortedPlayersByScore);
         }
 
-        public void SetupDice()
+        private void SetupDice()
         {
             Random rand = new Random();
             for (int i = 0; i < 5; i++)

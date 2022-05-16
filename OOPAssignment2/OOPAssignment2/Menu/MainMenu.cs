@@ -44,6 +44,9 @@ namespace OOPAssignment2
                     case 2:
                         NextMenu = new SettingsMenu();
                         break;
+                    case 3:
+                        Environment.Exit(0);
+                        break;
                     default:
                         NextMenu = new MainMenu();
                         break;

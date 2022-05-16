@@ -11,7 +11,6 @@ namespace OOPAssignment2
         #region [ Predefined menu/text positions ]
         // Variable coordinates for the different menus/boilerplate text
         public readonly (int x, int y) DicePos = ((Console.WindowWidth / 2) - 25, (Console.WindowHeight / 2) - 10);
-        public readonly (int x, int y) MenuPos = ((Console.WindowWidth / 2), (Console.WindowHeight / 2));
 
         #endregion
 

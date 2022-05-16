@@ -12,6 +12,7 @@ namespace OOPAssignment2
         // Variable coordinates for the different menus/boilerplate text
         public static readonly (int x, int y) TitlePos = ((Console.WindowWidth / 2) - (57 / 2), 0);
         public static readonly (int x, int y) ScoreboardPos = ((Console.WindowWidth / 2) - 13, (Console.WindowHeight / 2) + 5);
+        public readonly (int x, int y) MenuPos = ((Console.WindowWidth / 2), (Console.WindowHeight / 2));
 
         #endregion
 
