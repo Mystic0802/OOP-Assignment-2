@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace OOPAssignment2
 {
-    public class Program
+    public class Program : IO
     {
         static void Main(string[] args)
         {
@@ -13,6 +13,7 @@ namespace OOPAssignment2
             IMenu currentMenu = mainMenu;
             while (true)
             {
+                WriteBoilerplate();
                 currentMenu.Run();
                 currentMenu = currentMenu.NextMenu;
             }

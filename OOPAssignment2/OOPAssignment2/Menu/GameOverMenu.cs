@@ -10,13 +10,20 @@ namespace OOPAssignment2
     {
         private Player winner;
 
-        public List<string> Options => throw new NotImplementedException();
+        private readonly List<string> options = new List<string>() { "Play Game!", "Settings", "Exit" };
+
+        public List<string> Options { get => options; }
 
         public IMenu NextMenu { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        public void CloseMenu()
+        public GameOverMenu(Player player)
         {
-            throw new NotImplementedException();
+            winner = player;
+        }
+        public void Run()
+        {
+            WriteInMiddleHorizontal($"{winner.Name} won the game!", MenuPos.y - 2);
+            WriteOptions(options);
         }
 
         public void HandleInputs()
@@ -24,14 +31,10 @@ namespace OOPAssignment2
             throw new NotImplementedException();
         }
 
-        public void Run()
+        public void CloseMenu()
         {
-            throw new NotImplementedException();
+            NextMenu = new MainMenu();
         }
 
-        public GameOverMenu(Player player)
-        {
-            winner = player;
-        }
     }
 }

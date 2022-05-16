@@ -8,19 +8,23 @@ namespace OOPAssignment2
 {
     public class MenuIO : IO
     {
+        #region [ Predefined menu/text positions ]
+        // Variable coordinates for the different menus/boilerplate text
+        public readonly (int x, int y) MenuPos = ((Console.WindowWidth / 2), (Console.WindowHeight / 2));
+
+        #endregion
+
         private int choicesCount;
 
         public void WriteOptions(List<string> options)
         {
             choicesCount = options.Count;
-            var vertical = Console.WindowHeight / 2;
             for(int i = 0; i < choicesCount; i++)
             {
-                var middleWidth = (Console.WindowWidth / 2) - 8;
-                Write($"{i+1}: " + options[i],middleWidth,vertical+i);
+                Write($"{i+1}: " + options[i], MenuPos.x-8, MenuPos.y+ i);
             }
             MoveToNextLine();
-            Write("Option: ", (Console.WindowWidth / 2) - 8, Console.CursorTop);
+            Write("Option: ", MenuPos.x - 8, Console.CursorTop);
         }
 
         public void ClearMenu()

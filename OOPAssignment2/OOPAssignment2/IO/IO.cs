@@ -8,6 +8,13 @@ namespace OOPAssignment2
 {
     public class IO
     {
+        #region [ Predefined menu/text positions ]
+        // Variable coordinates for the different menus/boilerplate text
+        public static readonly (int x, int y) TitlePos = ((Console.WindowWidth / 2) - (57 / 2), 0);
+        public static readonly (int x, int y) ScoreboardPos = ((Console.WindowWidth / 2) - 13, (Console.WindowHeight / 2) + 5);
+
+        #endregion
+
         public static void Write(string text, int x, int y)
         {
             MoveCursor(x, y);
@@ -20,9 +27,9 @@ namespace OOPAssignment2
             {
                 Console.SetCursorPosition(x, y);
             }
-            catch
+            catch(Exception ex)
             {
-                throw;
+                throw ex;
             }
         }
 
@@ -47,7 +54,7 @@ namespace OOPAssignment2
             return Console.ReadLine();
         }
 
-        public void WriteInMiddle(string s, int y)
+        public void WriteInMiddleHorizontal(string s, int y)
         {
             Write(s, (Console.WindowWidth / 2) - (s.Length / 2), y);
         }
@@ -57,17 +64,29 @@ namespace OOPAssignment2
             WriteTitle();
         }
 
+
         private static void WriteTitle()
         {
-            int horizontal = (Console.WindowWidth / 2)-57;
-            int vertical = 0;
+            Write("  _____ _                            __  __", TitlePos.x, TitlePos.y);
+            Write(" |_   _| |_  _ _ ___ ___   ___ _ _  |  \\/  |___ _ _ ___", TitlePos.x, TitlePos.y + 1);
+            Write("   | | | ' \\| '_/ -_) -_) / _ \\ '_| | |\\/| / _ \\ '_/ -_)", TitlePos.x, TitlePos.y + 2);
+            Write("   |_| |_||_|_| \\___\\___| \\___/_|   |_|  |_\\___/_| \\___|", TitlePos.x, TitlePos.y + 3);
+            Write("─────────────────────────────────────────────────────────", TitlePos.x, TitlePos.y + 4);
 
-            Write("  _____ _                            __  __", horizontal, vertical);
-            Write(" |_   _| |_  _ _ ___ ___   ___ _ _  |  \\/  |___ _ _ ___", horizontal, vertical+1);
-            Write("   | | | ' \\| '_/ -_) -_) / _ \\ '_| | |\\/| / _ \\ '_/ -_)", horizontal, vertical + 1);
-            Write("   |_| |_||_|_| \\___\\___| \\___/_|   |_|  |_\\___/_| \\___|", horizontal, vertical + 1);
-            Write("─────────────────────────────────────────────────────────", horizontal, vertical + 1);
+        }
 
+
+
+        public static void WriteScoreboard()
+        {
+            int horizontal = (Console.WindowWidth / 2) - 13;
+            int vertical = (Console.WindowHeight/2) + 5;
+
+            Write("Scoreboard:", horizontal, vertical);
+            Write("1: ", horizontal, vertical + 1);
+            Write("2:", horizontal, vertical + 2);
+            Write("3:", horizontal, vertical + 3);
+            Write("4:", horizontal, vertical + 4);
         }
     }
 }
