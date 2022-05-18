@@ -123,7 +123,7 @@ namespace OOPAssignment2
             RollDice(player);
         }
 
-        public void RollDice(Player player)
+        private void RollDice(Player player)
         {
             int[] rolls = new int[DiceList.Count];
             for (int i = 0; i < DiceList.Count; i++)
@@ -156,7 +156,7 @@ namespace OOPAssignment2
             player.Score += score;
         }
 
-        public int RollDice(int[] previousRolls)
+        private int RollDice(int[] previousRolls)
         {
             for (int i = 0; i < DiceList.Count; i++)
             {
