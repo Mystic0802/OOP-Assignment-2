@@ -5,20 +5,19 @@ using System.Threading.Tasks;
 
 namespace OOPAssignment2
 {
-    public class Program : IO
+    public class Program
     {
         static void Main(string[] args)
         {
+
             MainMenu mainMenu = new MainMenu();
             IMenu currentMenu = mainMenu;
             while (true)
             {
-                WriteBoilerplate();
+                IO.WriteBoilerplate();
                 currentMenu.Run();
                 currentMenu = currentMenu.NextMenu;
             }
-
-            Console.ReadKey();
         }
 
         public static void TestDiceRoll(Game game)

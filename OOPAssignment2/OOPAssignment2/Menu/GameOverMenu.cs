@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OOPAssignment2
 {
-    class GameOverMenu : MenuIO, IMenu
+    public class GameOverMenu : MenuIO, IMenu
     {
         private readonly Player winner;
 
@@ -51,7 +51,7 @@ namespace OOPAssignment2
         public void CloseMenu()
         {
             ClearLine(MenuPos.y - 2);
-            ClearMenu();
+            Clear();
             NextMenu = new MainMenu();
         }
 

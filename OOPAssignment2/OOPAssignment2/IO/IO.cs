@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace OOPAssignment2
@@ -10,9 +11,11 @@ namespace OOPAssignment2
     {
         #region [ Predefined menu/text positions ]
         // Variable coordinates for the different menus/boilerplate text
-        public static readonly (int x, int y) TitlePos = ((Console.WindowWidth / 2) - (57 / 2), 0);
-        public static readonly (int x, int y) ScoreboardPos = ((Console.WindowWidth / 2) - 13, (Console.WindowHeight / 2) + 5);
+        public static readonly (int x, int y) TitlePos = ((Console.WindowWidth / 2) - (57 / 2), 1);
+        public static readonly (int x, int y) ScoreboardPos = ((Console.WindowWidth / 2) - 13, (Console.WindowHeight / 2) + 6);
         public readonly (int x, int y) MenuPos = ((Console.WindowWidth / 2), (Console.WindowHeight / 2));
+
+        private static readonly int borderThickness = 2;
 
         #endregion
 
@@ -41,13 +44,18 @@ namespace OOPAssignment2
 
         public static void ClearLine(int y)
         {
-            Write(new string(' ', Console.WindowWidth), 0, y);
+            Write(new string(' ', Console.WindowWidth-(borderThickness*2)), borderThickness, y);
         }
 
         public static void ClearAll()
         {
             Console.Clear();
             MoveCursor(0, 0);
+        }
+
+        public virtual void Clear()
+        {
+            ClearAll();
         }
 
         public static string GetInput()
@@ -60,8 +68,9 @@ namespace OOPAssignment2
             Write(s, (Console.WindowWidth / 2) - (s.Length / 2), y);
         }
 
-        public static void WriteBoilerplate()
+        public static void WriteBoilerplate() // A method which displays all desired boilerplate text in a single function call.
         {
+            WriteBorder();
             WriteTitle();
         }
 
@@ -76,18 +85,19 @@ namespace OOPAssignment2
 
         }
 
-
-
-        public static void WriteScoreboard()
+        private static void WriteBorder() 
         {
-            int horizontal = (Console.WindowWidth / 2) - 13;
-            int vertical = (Console.WindowHeight/2) + 5;
+            Console.BackgroundColor = ConsoleColor.Gray;
+            ClearAll();
+            Console.BackgroundColor = ConsoleColor.Black;
 
-            Write("Scoreboard:", horizontal, vertical);
-            Write("1: ", horizontal, vertical + 1);
-            Write("2:", horizontal, vertical + 2);
-            Write("3:", horizontal, vertical + 3);
-            Write("4:", horizontal, vertical + 4);
+            for (int y = borderThickness-1; y < Console.WindowHeight - (borderThickness/2); y++)
+            {
+                for (int x = borderThickness; x < Console.WindowWidth - (borderThickness); x++)
+                {
+                    Write(" ", x, y);
+                }
+            }
         }
     }
 }

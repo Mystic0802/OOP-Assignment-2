@@ -21,12 +21,11 @@ namespace OOPAssignment2
             Write("Option: ", MenuPos.x - 8, Console.CursorTop);
         }
 
-        public void ClearMenu()
+        public override void Clear() // Dynamic polymorphism
         {
             var vertical = Console.WindowHeight / 2;
             for (int i = 0; i <= choicesCount; i++)
                 ClearLine(vertical+i);
-            MoveCursor(0, 0);
         }
     }
 }

@@ -10,7 +10,7 @@ namespace OOPAssignment2
     {
         #region [ Predefined menu/text positions ]
         // Variable coordinates for the different menus/boilerplate text
-        public readonly (int x, int y) DicePos = ((Console.WindowWidth / 2) - 25, (Console.WindowHeight / 2) - 10);
+        public readonly (int x, int y) DicePos = ((Console.WindowWidth / 2) - 25, (Console.WindowHeight / 2) - 9);
 
         #endregion
 
@@ -57,7 +57,19 @@ namespace OOPAssignment2
                 yield return new Player($"{playerType}{i + 1}", isComputer);
             }
         }
-        
+
+        public void WriteScoreboard()
+        {
+            int horizontal = (Console.WindowWidth / 2) - 13;
+            int vertical = (Console.WindowHeight / 2) + 5;
+
+            Write("Scoreboard:", horizontal, vertical);
+            Write("1: ", horizontal, vertical + 1);
+            Write("2:", horizontal, vertical + 2);
+            Write("3:", horizontal, vertical + 3);
+            Write("4:", horizontal, vertical + 4);
+        }
+
         public void UpdateScoreboard(List<Player> players)
         {
             for(int i = 0; i < players.Count; i++)
@@ -67,11 +79,10 @@ namespace OOPAssignment2
             }
         }
 
-        public void ClearGame()
+        public override void Clear() // Dynamic polymorphism
         {
             ClearAll();
             WriteBoilerplate();
         }
-
     }
 }

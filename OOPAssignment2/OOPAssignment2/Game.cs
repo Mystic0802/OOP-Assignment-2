@@ -9,13 +9,13 @@ namespace OOPAssignment2
     {
         private Player winner;
 
-        public List<Die> DiceList { get; private set; }
-        public List<Player> PlayerList { get; private set; }
-        public List<Player> SortedPlayersByScore { get; private set; }
+        private List<Die> DiceList { get; set; }
+        private List<Player> PlayerList { get; set; }
+        private List<Player> SortedPlayersByScore { get; set; }
 
         public List<string> Options => throw new NotImplementedException();
 
-        public IMenu NextMenu { get; set; }
+        public IMenu NextMenu { get; set; } // This should have a private set, but cannot due to Interface limits.
 
         public Game()
         {
@@ -24,7 +24,7 @@ namespace OOPAssignment2
             SortedPlayersByScore = new List<Player>();
         }
 
-        public Game(List<Player> players)
+        public Game(List<Player> players) // Static polymorphism
         {
             DiceList = new List<Die>();
             PlayerList = players;
@@ -61,20 +61,19 @@ namespace OOPAssignment2
             {
                 PlayerList.AddRange(GetPlayersCount("Computer", 1, 3, true));
             }
-            SortedPlayersByScore = PlayerList.ToList(); // Adds players to SortedPlayersByScore without using reference.
+            SortedPlayersByScore = PlayerList.ToList(); // Adds players to SortedPlayersByScore without keeping reference.
         }
 
         #endregion
 
         public void Run()
         {
-            CloseMenu();
             SetupGame();
             int round = 0;
             while (true)
             {
                 round++;
-                WriteInMiddleHorizontal($"Round {round}!", (Console.WindowHeight / 2) - 2);
+                WriteInMiddleHorizontal($"Round {round}!", MenuPos.y - 2);
 
                 for (int i = 0; i < PlayerList.Count; i++)
                 {
@@ -82,9 +81,9 @@ namespace OOPAssignment2
                     {
                         die.IsFrozen = false;
                     }
-                    ClearLine((Console.WindowHeight / 2) - 1);
-                    WriteInMiddleHorizontal($"{PlayerList[i].Name}'s turn!", (Console.WindowHeight / 2) - 1);
-                    ClearLine((Console.WindowHeight / 2) + 1); // Clears previous "*player* scored #" message
+                    ClearLine(MenuPos.y - 1);
+                    WriteInMiddleHorizontal($"{PlayerList[i].Name}'s turn!", MenuPos.y - 1);
+                    ClearLine(MenuPos.y + 1); // Clears previous "*player* scored #" message
 
                     if (PlayerList[i].IsComputer)
                         ComputerRoll(PlayerList[i]);
@@ -99,7 +98,7 @@ namespace OOPAssignment2
                         CloseMenu();
                         return;
                     }
-                    Thread.Sleep(2000); // It's ok to make thread sleep in this case. There is nothing (e.g. gui, async methods) that rely on this thread.
+                    Thread.Sleep(1000); // It's ok to make thread sleep in this case. There is nothing (e.g. gui, async methods) that rely on this thread.
                 }
             }
         }
@@ -112,9 +111,9 @@ namespace OOPAssignment2
         //could implement delegate here
         private void PlayerRoll(Player player)
         {
-            WriteInMiddleHorizontal("Press Enter to roll the dice.", Console.WindowHeight / 2);
+            WriteInMiddleHorizontal("Press Enter to roll the dice.", MenuPos.y);
             Console.ReadKey();
-            ClearLine(Console.WindowHeight / 2);
+            ClearLine(MenuPos.y);
 
             RollDice(player);
         }
@@ -139,15 +138,21 @@ namespace OOPAssignment2
             {
                 if (!player.IsComputer)
                 { 
-                    WriteInMiddleHorizontal($"2 of a kind has been rolled! Press Enter to reroll!", Console.WindowHeight / 2);
+                    WriteInMiddleHorizontal($"2 of a kind has been rolled! Press Enter to reroll!", MenuPos.y);
                     Console.ReadKey();
-                    ClearLine(Console.WindowHeight / 2);
+                    ClearLine(MenuPos.y);
+                }
+                else
+                {
+                    WriteInMiddleHorizontal($"2 of a kind has been rolled!", MenuPos.y);
+                    Thread.Sleep(1000);
+                    ClearLine(MenuPos.y);
                 }
 
                 score = RollDice(rolls);
             }
-            ClearLine((Console.WindowHeight / 2) + 1);
-            WriteInMiddleHorizontal($"{player.Name} scored {score}", (Console.WindowHeight / 2) + 1);
+            ClearLine(MenuPos.y + 1);
+            WriteInMiddleHorizontal($"{player.Name} scored {score}", MenuPos.y + 1);
             player.Score += score;
         }
 
@@ -201,7 +206,7 @@ namespace OOPAssignment2
 
         public void CloseMenu()
         {
-            ClearGame();
+            Clear();
             NextMenu = new GameOverMenu(winner);
         }
         public void HandleInputs()

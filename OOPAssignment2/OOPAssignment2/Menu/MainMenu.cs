@@ -8,7 +8,7 @@ namespace OOPAssignment2
 {
     internal class MainMenu : MenuIO, IMenu
     {
-        private readonly List<string> options = new List<string>() { "Play Game!", "Settings", "Exit" };
+        private readonly List<string> options = new List<string>() { "Play Game!", "Settings(Not implemented)", "Exit" };
         
         public List<string> Options { get => options; }
 
@@ -28,7 +28,7 @@ namespace OOPAssignment2
             {
                 throw new NextMenuNotSetException(); // User-defined exception
             }
-            ClearMenu();
+            Clear();
         }
 
         public void HandleInputs()
