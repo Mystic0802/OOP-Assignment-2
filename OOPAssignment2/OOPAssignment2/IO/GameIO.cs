@@ -20,7 +20,7 @@ namespace OOPAssignment2
             /// │ O   O │
             /// │ O O O │
             /// │ O   O │
-            /// └───────┘
+            /// └───────┘ 
 
             for (int i = 0; i < diceList.Length; i++)
             {

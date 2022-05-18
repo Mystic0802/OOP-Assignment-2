@@ -10,7 +10,7 @@ namespace OOPAssignment2
     {
         private readonly Player winner;
 
-        private readonly List<string> options = new List<string>() { "Play Again!", "Exit to Main Menu", "Exit" };
+        private readonly List<string> options = new List<string>() { "Play Again!(With the same players)", "Exit to Main Menu", "Exit" };
 
         public List<string> Options { get => options; }
 

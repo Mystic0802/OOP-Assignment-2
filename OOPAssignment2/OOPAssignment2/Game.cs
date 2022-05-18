@@ -108,7 +108,7 @@ namespace OOPAssignment2
 
         #region [ Dice Rolling ]
 
-        //could implement delegate here
+        // A delegate could be implemented here
         private void PlayerRoll(Player player)
         {
             WriteInMiddleHorizontal("Press Enter to roll the dice.", MenuPos.y);
