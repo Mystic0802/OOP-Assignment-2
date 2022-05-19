@@ -79,14 +79,11 @@ namespace OOPAssignment2
         /// </summary>
         protected void WriteScoreboard()
         {
-            int horizontal = (Console.WindowWidth / 2) - 13;
-            int vertical = (Console.WindowHeight / 2) + 5;
-
-            Write("Scoreboard:", horizontal, vertical);
-            Write("1: ", horizontal, vertical + 1);
-            Write("2:", horizontal, vertical + 2);
-            Write("3:", horizontal, vertical + 3);
-            Write("4:", horizontal, vertical + 4);
+            Write("Scoreboard:", ScoreboardPos.x, ScoreboardPos.y);
+            Write("1: ", ScoreboardPos.x, ScoreboardPos.y + 1);
+            Write("2: ", ScoreboardPos.x, ScoreboardPos.y + 2);
+            Write("3: ", ScoreboardPos.x, ScoreboardPos.y + 3);
+            Write("4: ", ScoreboardPos.x, ScoreboardPos.y + 4);
         }
 
         /// <summary>
@@ -97,8 +94,8 @@ namespace OOPAssignment2
         {
             for(int i = 0; i < players.Count; i++)
             {
-                Write(new string(' ', 40), ScoreboardPos.x + 3, ScoreboardPos.y + 1 + i); // Clears the name at the current position
-                Write($"{players[i].Name} - {players[i].Score}", ScoreboardPos.x+3, ScoreboardPos.y + i);
+                Write(new string(' ', SettingsMenu.nameCharLimit + 6), ScoreboardPos.x + 3, ScoreboardPos.y + 1 + i); // Clears the name at the current position
+                Write($"{players[i].Name} - {players[i].Score}", ScoreboardPos.x + 3, ScoreboardPos.y + 1 + i);
             }
         }
 

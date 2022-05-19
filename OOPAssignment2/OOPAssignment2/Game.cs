@@ -123,14 +123,18 @@ namespace OOPAssignment2
 
         private void PlayerRoll(Player player)
         {
+            WriteDice(new int[] {0,0,0,0,0}); // Draws empty dice
             if (!player.IsComputer)
             {
                 WriteInMiddleHorizontal("Press Enter to roll the dice.", MenuPos.y);
                 Console.ReadKey();
                 ClearLine(MenuPos.y);
             }
+            else
+                Thread.Sleep(500);
 
             int[] firstRoll = RollDice();
+            WriteDice(firstRoll);
 
             var frozenNumberAndFreq = GetRollMostOccuring(firstRoll);
 
@@ -144,11 +148,12 @@ namespace OOPAssignment2
                 else
                 {
                     WriteInMiddleHorizontal($"2 of a kind has been rolled!", MenuPos.y);
-                    Thread.Sleep(1000);
+                    Thread.Sleep(500);
                 }
                 ClearLine(MenuPos.y);
 
                 var temp = RerollNonMatching(firstRoll, RollDice(), frozenNumberAndFreq.num); // Reroll
+                WriteDice(temp);
                 frozenNumberAndFreq = GetRollMostOccuring(temp); // Reset highest frequency
             }
 
@@ -170,7 +175,7 @@ namespace OOPAssignment2
                 Console.ReadKey();
             }
             else
-                Thread.Sleep(1000);
+                Thread.Sleep(500);
 
             ClearLine(MenuPos.y);     // Clears "# of a kind has been rolled!" message
             ClearLine(MenuPos.y + 1); // Clears "*player* scored #" message
@@ -193,8 +198,6 @@ namespace OOPAssignment2
             for (int i = 0; i < DiceList.Count; i++)
             {
                 rolls[i] = DiceList[i].Roll();
-                Thread.Sleep(750);
-                WriteDice(rolls);
             }
 
             return rolls;
@@ -220,7 +223,7 @@ namespace OOPAssignment2
             for (int c = 1; c < frequency.Length; c++) // Loop to find highest frequency.
             {
                 if(frequency[c] > mostOccuring.freq)
-                    mostOccuring = (rolls[c],frequency[c]);
+                    mostOccuring = (c+1,frequency[c]);
             }
             return mostOccuring;
         }

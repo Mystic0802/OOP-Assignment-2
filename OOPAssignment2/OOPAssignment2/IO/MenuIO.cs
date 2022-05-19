@@ -15,10 +15,10 @@ namespace OOPAssignment2
             choicesCount = options.Count;
             for(int i = 0; i < choicesCount; i++)
             {
-                Write($"{i+1}: " + options[i], MenuPos.x-8, MenuPos.y+ i);
+                Write($"{i+1}: " + options[i], MenuPos.x-12, MenuPos.y+ i);
             }
             MoveToNextLine();
-            Write("Option: ", MenuPos.x - 8, Console.CursorTop);
+            Write("Option: ", MenuPos.x - 12, Console.CursorTop);
         }
 
         protected override void Clear() // Dynamic polymorphism
