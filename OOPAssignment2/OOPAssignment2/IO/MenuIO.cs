@@ -10,7 +10,7 @@ namespace OOPAssignment2
     {
         private int choicesCount;
 
-        public void WriteOptions(List<string> options)
+        protected void WriteOptions(List<string> options)
         {
             choicesCount = options.Count;
             for(int i = 0; i < choicesCount; i++)
@@ -21,7 +21,7 @@ namespace OOPAssignment2
             Write("Option: ", MenuPos.x - 8, Console.CursorTop);
         }
 
-        public override void Clear() // Dynamic polymorphism
+        protected override void Clear() // Dynamic polymorphism
         {
             var vertical = Console.WindowHeight / 2;
             for (int i = 0; i <= choicesCount; i++)

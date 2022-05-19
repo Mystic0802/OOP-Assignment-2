@@ -44,6 +44,9 @@ namespace OOPAssignment2
                     case 3:
                         Environment.Exit(0);
                         break;
+                    default:
+                        NextMenu = new GameOverMenu(winner);
+                        break;
                 }
             }
         }
@@ -52,7 +55,6 @@ namespace OOPAssignment2
         {
             ClearLine(MenuPos.y - 2);
             Clear();
-            NextMenu = new MainMenu();
         }
 
     }

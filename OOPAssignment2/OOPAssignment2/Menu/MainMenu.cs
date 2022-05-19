@@ -33,8 +33,7 @@ namespace OOPAssignment2
 
         public void HandleInputs()
         {
-            var userInput = GetInput();
-            if (userInput != null && int.TryParse(userInput, out int result) && result > 0 && result <= Options.Count)
+            if (int.TryParse(GetInput(), out int result))
             {
                 switch (result)
                 {

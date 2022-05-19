@@ -11,11 +11,11 @@ namespace OOPAssignment2
     {
         #region [ Predefined menu/text positions ]
         // Variable coordinates for the different menus/boilerplate text
-        public static readonly (int x, int y) TitlePos = ((Console.WindowWidth / 2) - (57 / 2), 1);
-        public static readonly (int x, int y) ScoreboardPos = ((Console.WindowWidth / 2) - 13, (Console.WindowHeight / 2) + 6);
-        public readonly (int x, int y) MenuPos = ((Console.WindowWidth / 2), (Console.WindowHeight / 2));
+        protected static readonly (int x, int y) TitlePos = ((Console.WindowWidth / 2) - (57 / 2), 1);
+        protected static readonly (int x, int y) ScoreboardPos = ((Console.WindowWidth / 2) - 13, (Console.WindowHeight / 2) + 6);
+        protected readonly (int x, int y) MenuPos = ((Console.WindowWidth / 2), (Console.WindowHeight / 2));
 
-        private static readonly int borderThickness = 2;
+        protected static readonly int borderThickness = 2;
 
         #endregion
 
@@ -53,7 +53,7 @@ namespace OOPAssignment2
             MoveCursor(0, 0);
         }
 
-        public virtual void Clear()
+        protected virtual void Clear()
         {
             ClearAll();
         }

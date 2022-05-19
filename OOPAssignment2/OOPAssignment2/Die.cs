@@ -12,7 +12,7 @@ namespace OOPAssignment2
         {
             Rand = r;
             IsFrozen = false;
-            Sides = 6;
+            Sides = 6; // Defaults sides value to 6
         }
 
         public Die(Random r, int sides) // Static polymorphism
@@ -22,7 +22,7 @@ namespace OOPAssignment2
             Sides = sides;
         }
 
-        public int Roll()
+        public int Roll() // Generates a random number based on the number of sides. 1 -> sides
         {
             return Rand.Next(1,Sides+1);
         }
