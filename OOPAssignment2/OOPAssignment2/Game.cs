@@ -53,10 +53,25 @@ namespace OOPAssignment2
         private void SetupDice()
         {
             Random rand = new Random();
+            List<Die> diceList = new List<Die>();
             for (int i = 0; i < 5; i++)
             {
-                DiceList.Add(new Die(rand));
+                diceList.Add(new Die(rand));
             }
+            DiceList = diceList;
+        }
+
+        private void SetupDice(int diceCount)
+        {
+            if(diceCount < 1)
+                diceCount = 1;
+            Random rand = new Random();
+            List<Die> diceList = new List<Die>();
+            for (int i = 0; i < diceCount; i++)
+            {
+                diceList.Add(new Die(rand));
+            }
+            DiceList = diceList;
         }
 
         private void SetupPlayers()
@@ -85,10 +100,6 @@ namespace OOPAssignment2
 
                 for (int i = 0; i < PlayerList.Count; i++)
                 {
-                    foreach (var die in DiceList)
-                    {
-                        die.IsFrozen = false;
-                    }
                     ClearLine(MenuPos.y - 1);
                     WriteInMiddleHorizontal($"{PlayerList[i].Name}'s turn!", MenuPos.y - 1);
 
@@ -102,7 +113,6 @@ namespace OOPAssignment2
                         CloseMenu();
                         return;
                     }
-                    Thread.Sleep(1000); // It's ok to make thread sleep in this case. There is nothing (e.g. gui, async methods) that rely on this thread.
                 }
             }
         }
@@ -137,6 +147,7 @@ namespace OOPAssignment2
             WriteDice(firstRoll);
 
             var frozenNumberAndFreq = GetRollMostOccuring(firstRoll);
+            WriteInMiddleHorizontal(String.Join(",", firstRoll) + "   " + frozenNumberAndFreq.num, ScoreboardPos.y + 6);
 
             if(frozenNumberAndFreq.freq == 2) // If frequency after first roll is 2. Reroll.
             {
@@ -152,7 +163,9 @@ namespace OOPAssignment2
                 }
                 ClearLine(MenuPos.y);
 
-                var temp = RerollNonMatching(firstRoll, RollDice(), frozenNumberAndFreq.num); // Reroll
+                var secondRoll = RollDice();
+                WriteInMiddleHorizontal(String.Join(",", secondRoll), ScoreboardPos.y+7);
+                var temp = RerollNonMatching(firstRoll, secondRoll, frozenNumberAndFreq.num); // Reroll
                 WriteDice(temp);
                 frozenNumberAndFreq = GetRollMostOccuring(temp); // Reset highest frequency
             }
@@ -160,7 +173,7 @@ namespace OOPAssignment2
             if(frozenNumberAndFreq.freq > 2) // If frequency after first or both rolls is > 2. Add score.
             {
                 WriteInMiddleHorizontal($"{frozenNumberAndFreq.freq} of a kind has been rolled!", MenuPos.y);
-                int score = (int)(3 * Math.Pow(2, frozenNumberAndFreq.freq - 3));
+                int score = GetScore(frozenNumberAndFreq.freq);
                 WriteInMiddleHorizontal($"{player.Name} scored {score}", MenuPos.y + 1);
                 player.Score += score;
             }
@@ -182,7 +195,15 @@ namespace OOPAssignment2
             ClearLine(MenuPos.y+2);   // Clears "Press Enter to continue..." message
         }
 
-
+        /// <summary>
+        /// Calculates the score.
+        /// </summary>
+        /// <param name="frequency">Count of the same number in the dice roll.</param>
+        /// <returns></returns>
+        private int GetScore(int frequency)
+        {
+            return (int)(3 * Math.Pow(2, frequency - 3));
+        }
 
         /// <summary>
         /// Rolls all the dice in DiceList.
@@ -199,7 +220,6 @@ namespace OOPAssignment2
             {
                 rolls[i] = DiceList[i].Roll();
             }
-
             return rolls;
         }
 
@@ -218,7 +238,7 @@ namespace OOPAssignment2
                 frequency[rolls[i] - 1]++;
             }
 
-            (int num, int freq) mostOccuring = (rolls[0],frequency[0]); // Create tuple with the first value.
+            (int num, int freq) mostOccuring = (1,frequency[0]); // Create tuple with the first value.
 
             for (int c = 1; c < frequency.Length; c++) // Loop to find highest frequency.
             {
@@ -252,6 +272,89 @@ namespace OOPAssignment2
             }
             return resultingRolls;
         }
+        #endregion
+
+        #region [ Testing Methods ]
+
+        public void PerformAllTest()
+        {
+            Console.WriteLine("\n-=-=-=-=-=-=- Performing all game tests -=-=-=-=-=-=-");
+            TestRollDice();
+            TestMostOccuring();
+            TestReroll();
+            TestDiceScore();
+        }
+
+        public void TestRollDice()
+        {
+            Console.WriteLine("\n-=-=-=-=-=-=- Testing dice roll count -=-=-=-=-=-=-");
+            
+            SetupDice(1);
+
+            int[] testRolls = RollDice();
+            if (testRolls.Length == DiceList.Count)
+                Console.WriteLine("Rolls count passed!");
+            else
+                Console.WriteLine("Rolls count failed!");
+        }
+
+        public void TestMostOccuring()
+        {
+            Console.WriteLine("\n-=-=-=-=-=-=- Testing most occuring -=-=-=-=-=-=-");
+            int[] testArray = new int[] { 6, 2, 4, 1, 1 };
+
+            SetupDice(1);
+
+            var testResult = GetRollMostOccuring(testArray);
+            if (testResult.num == 1)
+                Console.WriteLine("Most occuring number passed!");
+            else
+                Console.WriteLine("Most occuring number failed!");
+
+            if (testResult.freq == 2)
+                Console.WriteLine("Most occuring number frequency passed!");
+            else
+                Console.WriteLine("Most occuring number frequency failed!");
+        }
+
+        public void TestReroll()
+        {
+            Console.WriteLine("\n-=-=-=-=-=-=- Testing reroll -=-=-=-=-=-=-");
+            int[] testArray = new int[] { 1, 5, 5, 6, 1 };
+            int[] testArray2 = new int[] { 4, 6, 3, 3, 2 };
+            int correctMostOccuringNum = 5;
+
+            var testResult = RerollNonMatching(testArray, testArray2, correctMostOccuringNum);
+            int[] temp = new int[] { 4, 6, 3, 1, 1 };
+            if (testResult.SequenceEqual(temp))
+                Console.WriteLine("Reroll passed! Result: " + String.Join(", " ,testResult));
+            else
+                Console.WriteLine("Reroll failed! Result: " + String.Join(", ", testResult) + "   Expected: 4,6,3,1,1");
+        }
+
+        public void TestDiceScore()
+        {
+            Console.WriteLine("\n-=-=-=-=-=-=- Testing dice score -=-=-=-=-=-=-");
+
+            int result = GetScore(3);
+            if (result == 3)
+                Console.WriteLine("3 Score passed! Returned value: " + result);
+            else
+                Console.WriteLine("3 Score failed! Returned value: " + result);
+
+            result = GetScore(4);
+            if (result == 6)
+                Console.WriteLine("6 Score passed! Returned value: " + result);
+            else
+                Console.WriteLine("6 Score failed! Returned value: " + result);
+
+            result = GetScore(5);
+            if (result == 12)
+                Console.WriteLine("12 Score passed! Returned value: " + result);
+            else
+                Console.WriteLine("12 Score failed! Returned value: " + result);
+        }
+
         #endregion
     }
 }
